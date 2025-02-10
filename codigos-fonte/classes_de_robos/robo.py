@@ -1,8 +1,10 @@
+from random import random
+
 class Robo():
-    Robo.nivel_critico = 0.40
+    nivel_critico = 0.40
     def __init__(self, nome:str) -> None:
         self.nome = nome
-        self.vida = random.random()
+        self.vida = random()
 
     @property
     def nome(self) -> str:
@@ -28,7 +30,7 @@ class Robo():
         if(valor < 0 and valor > 1):
             raise ValueError("Atributo deve ser maior que 0 e menor que 1")
         
-        self.__vida = vida
+        self.__vida = valor
     
     def precisa_de_medico() -> bool:
         return self.vida < Robo.nivel_critico
@@ -39,5 +41,5 @@ class Robo():
         
         nome_bebe = nome_pai + '-' + nome_mae
         
-        return Robo(nome_bebe)
+        return type(self)(nome_bebe)
         
