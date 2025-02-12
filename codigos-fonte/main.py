@@ -1,5 +1,5 @@
 from classes_de_robos import Robo, RoboMedico, RoboLutador
-from random import choice
+from random import choice, shuffle
 
 def simular_luta(grupo, equipeM, tipo_simulacao:str):
 
@@ -17,15 +17,14 @@ def simular_luta(grupo, equipeM, tipo_simulacao:str):
     for medicos in equipeM:
         print(repr(medicos))
 
-    print("\n\n" + '-'*15)
+    print("\n\n" + '-'*50)
     while len(grupo) > 1:
         atacante = choice(grupo)
         alvo = choice([r for r in grupo if r != atacante])
         
-        print(f"{atacante.nome} ataca {alvo.nome}!")
         atacante.atacar(alvo)
         
-        if alvo.vida < 0.1:
+        if alvo.vida < Robo.nivel_critico:
             print(f"{alvo.nome} está com pouca vida e pede ajuda médica!")
             medico = choice(equipeM)
             
@@ -35,7 +34,7 @@ def simular_luta(grupo, equipeM, tipo_simulacao:str):
             else:
                 print(f"{medico.nome} recusou o chamado de {alvo.nome}!")
         
-        if atacante.vida < 0.1:
+        if atacante.vida < Robo.nivel_critico:
             print(f"{atacante.nome} está com pouca vida e pede ajuda médica!")
             medico = choice(equipeM)
             
@@ -45,19 +44,24 @@ def simular_luta(grupo, equipeM, tipo_simulacao:str):
             else:
                 print(f"{medico.nome} recusou o chamado de {atacante.nome}!")
         
-        if alvo.vida < 0.075:
+        if alvo.vida < 0.1:
             print(f"{alvo.nome} foi eliminado!")
             grupo.remove(alvo)
         
+        
     print(f"Vencedor do grupo: {grupo[0].nome}\n")
 
-    print('-'*15)
+    print('-'*50)
     return grupo[0]
 
 def main():
-    # Criando lutadores
-    lutadores = [RoboLutador(f"L{i}") for i in range(6)]
-    medicos = [RoboMedico(f"M{i}") for i in range(4)]
+    lutadores_nomes = ['Jimmy-Neutron', 'Timmy-Turner', 'Perry-Ornintorrinco', 'Boi-Ben', 'Ben-Tennyson', 'Lula-Molusco']
+    shuffle(lutadores_nomes)
+    lutadores = [RoboLutador(nome) for nome in lutadores_nomes]
+
+    medicos_nomes = ['Doutora-Brinquedo', 'Salsicha', 'Gwen-Tennyson', 'Pepa-Pig']
+    shuffle(medicos_nomes)
+    medicos = [RoboMedico(nome) for nome in medicos_nomes]
 
     # Dividindo em dois grupos
     grupo1 = lutadores[:3]
@@ -70,15 +74,19 @@ def main():
     vencedor1 = simular_luta(grupo1, equipeM1, 'Fases_de_Grupos')
     vencedor2 = simular_luta(grupo2, equipeM2,'Fases_de_Grupos')
     
+    medico = choice(medicos)
+
+    if(vencedor1.vida < Robo.nivel_critico): medico.curar(vencedor1)
+    if(vencedor2.vida < Robo.nivel_critico): medico.curar(vencedor2)
+    
     campeao = simular_luta([vencedor1, vencedor2], medicos, 'Final')
     
-    print('-'*15)
-    print(f"\nO grande campeão é: {campeao.nome}!")
+    print(f"\nO grande campeão é: {campeao.nome}!\n")
     
-    robos = [Robo(f"R{i}") for i in range(3)]
-    medicos = [RoboMedico(f"M{i}") for i in range(3)]
-    lutadores = [RoboLutador(f"L{i}") for i in range(3)]    
-    for _ in range(3):
+    print('-'*50)
+    print(f"\nFase de fabricação de novos robôs")
+    robos = [Robo(f"R{i}") for i in range(3)]   
+    for _ in range(5):
         pai = choice(robos + lutadores + medicos)
         mae = choice(robos + lutadores + medicos)
         if pai != mae:

@@ -13,10 +13,10 @@ class Robo():
     @nome.setter
     def nome(self, nome: str) -> None:
         if "-" in nome:
-            if len(nome) > 11 or len(nome) < 2:
+            if len(nome) > 25 or len(nome) < 2:
                 raise ValueError("Nome com '-' deve ter entre 2 e 11 caracteres.")
         else:
-            if len(nome) > 5 or len(nome) < 2:
+            if len(nome) > 12 or len(nome) < 2:
                 raise ValueError("Nome sem '-' deve ter entre 2 e 5 caracteres.")
         
         self.__nome = nome
@@ -40,6 +40,8 @@ class Robo():
         nome_mae = outroRobo.nome.split("-")[0]
         
         nome_bebe = nome_pai + '-' + nome_mae
-        
+        if(self.__class__ == Robo):
+            return type(outroRobo)(nome_bebe)
+
         return type(self)(nome_bebe)
         

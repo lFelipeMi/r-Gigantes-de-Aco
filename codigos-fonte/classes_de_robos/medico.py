@@ -28,4 +28,5 @@ class RoboMedico(Robo):
             print(f"O médico {self.nome} é incapaz de curar {alvo.nome} pois sua vida é insuficiente!")
         else:
             alvo.vida = min(1, alvo.vida + self.poder_de_cura)
+            print(f"Vida de {alvo.nome} em {alvo.vida:.2f}")
 
